@@ -4,7 +4,7 @@ local player = {x = 100, y = 100, speed = 200, size = 50, dash=100, direction='u
 -- Bullet
 local bullets = {}
 
-local key_maps = {['w'] = false, ['a'] = false, ['s'] = false, ['d'] = false}
+local key_maps = {['w'] = false, ['a'] = false, ['s'] = false, ['d'] = false, ['z'] = false}
 
 function pewpew()
     bullet = {x = player.x, y = player.y, speed = 500}
@@ -62,32 +62,59 @@ end
 
 
 function love.update(dt)
-    if key_maps['a'] then
-        player.x = player.x - player.speed * dt
-        player.direction = 'left'
-    end
-    if key_maps['d'] then
-        player.x = player.x + player.speed * dt
-        player.direction = 'right'
-    end
-    if key_maps['w'] then
-        player.y = player.y - player.speed * dt
-        player.direction = 'up'
+    if key_maps['lalt'] then
         if key_maps['a'] then
-            player.direction = 'upleft'
+            player.direction = 'left'
         end
         if key_maps['d'] then
-            player.direction = 'upright'
+            player.direction = 'right'
         end
-    end
-    if key_maps['s'] then
-        player.y = player.y + player.speed * dt
-        player.direction = 'down'
+        if key_maps['w'] then
+            player.direction = 'up'
+            if key_maps['a'] then
+                player.direction = 'upleft'
+            end
+            if key_maps['d'] then
+                player.direction = 'upright'
+            end
+        end
+        if key_maps['s'] then
+            player.direction = 'down'
+            if key_maps['a'] then
+                player.direction = 'downleft'
+            end
+            if key_maps['d'] then
+                player.direction = 'downright'
+            end
+        end
+    else
         if key_maps['a'] then
-            player.direction = 'downleft'
+            player.x = player.x - player.speed * dt
+            player.direction = 'left'
         end
         if key_maps['d'] then
-            player.direction = 'downright'
+            player.x = player.x + player.speed * dt
+            player.direction = 'right'
+        end
+        if key_maps['w'] then
+            player.y = player.y - player.speed * dt
+            player.direction = 'up'
+            if key_maps['a'] then
+                player.direction = 'upleft'
+            end
+            if key_maps['d'] then
+                player.direction = 'upright'
+            end
+        end
+        if key_maps['s'] then
+            player.y = player.y + player.speed * dt
+            player.direction = 'down'
+            if key_maps['a'] then
+                player.direction = 'downleft'
+            end
+            if key_maps['d'] then
+                player.direction = 'downright'
+            end
         end
     end
 

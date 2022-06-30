@@ -1,10 +1,12 @@
 -- Player
 local player = {x = 100, y = 100, speed = 200, size = 50, dash=100, direction='up'}
 
+local playing = true
+
 -- Bullet
 local bullets = {}
 
-local key_maps = {['up'] = false, ['right'] = false, ['down'] = false, ['right'] = false}
+local key_maps = {['up'] = false, ['right'] = false, ['down'] = false, ['right'] = false, ['z'] = false}
 
 function pewpew()
     bullet = {x = player.x, y = player.y, speed = 500}
@@ -22,7 +24,10 @@ function love.keypressed(key)
     if (key == 'c') then
         pewpew()
     end
-        
+
+    if (key == 'p') then
+        playing = not playing
+    end
 end
 
 function love.keyreleased(key)
@@ -62,67 +67,96 @@ end
 
 
 function love.update(dt)
-    if key_maps['left'] then
-        player.x = player.x - player.speed * dt
-        player.direction = 'left'
-    end
-    if key_maps['right'] then
-        player.x = player.x + player.speed * dt
-        player.direction = 'right'
-    end
-    if key_maps['up'] then
-        player.y = player.y - player.speed * dt
-        player.direction = 'up'
-        if key_maps['left'] then
-            player.direction = 'upleft'
+    if playing then
+        if key_maps['z'] then
+            if key_maps['left'] then
+                player.direction = 'left'
+            end
+            if key_maps['right'] then
+                player.direction = 'right'
+            end
+            if key_maps['up'] then
+                player.direction = 'up'
+                if key_maps['left'] then
+                    player.direction = 'upleft'
+                end
+                if key_maps['right'] then
+                    player.direction = 'upright'
+                end
+            end
+            if key_maps['down'] then
+                player.direction = 'down'
+                if key_maps['left'] then
+                    player.direction = 'downleft'
+                end
+                if key_maps['right'] then
+                    player.direction = 'downright'
+                end
+            end
+        else
+            if key_maps['left'] then
+                player.x = player.x - player.speed * dt
+                player.direction = 'left'
+            end
+            if key_maps['right'] then
+                player.x = player.x + player.speed * dt
+                player.direction = 'right'
+            end
+            if key_maps['up'] then
+                player.y = player.y - player.speed * dt
+                player.direction = 'up'
+                if key_maps['left'] then
+                    player.direction = 'upleft'
+                end
+                if key_maps['right'] then
+                    player.direction = 'upright'
+                end
+            end
+            if key_maps['down'] then
+                player.y = player.y + player.speed * dt
+                player.direction = 'down'
+                if key_maps['left'] then
+                    player.direction = 'downleft'
+                end
+                if key_maps['right'] then
+                    player.direction = 'downright'
+                end
+            end
         end
-        if key_maps['right'] then
-            player.direction = 'upright'
-        end
-    end
-    if key_maps['down'] then
-        player.y = player.y + player.speed * dt
-        player.direction = 'down'
-        if key_maps['left'] then
-            player.direction = 'downleft'
-        end
-        if key_maps['right'] then
-            player.direction = 'downright'
-        end
-    end
 
-    -- move all existing bullets
-    for index, bullet in ipairs(bullets) do
-        if (bullet) then
-            if (bullet.direction == 'up') then
-                bullet.y = bullet.y - bullet.speed * dt
-            elseif (bullet.direction == 'down') then
-                bullet.y = bullet.y + bullet.speed * dt
-            end
+        -- move all existing bullets
+        for index, bullet in ipairs(bullets) do
+            if (bullet) then
+                if (bullet.direction == 'up') then
+                    bullet.y = bullet.y - bullet.speed * dt
+                elseif (bullet.direction == 'down') then
+                    bullet.y = bullet.y + bullet.speed * dt
+                end
 
-            if (bullet.direction == 'left') then
-                bullet.x = bullet.x - bullet.speed * dt
-            elseif (bullet.direction == 'right') then
-                bullet.x = bullet.x + bullet.speed * dt
-            end
+                if (bullet.direction == 'left') then
+                    bullet.x = bullet.x - bullet.speed * dt
+                elseif (bullet.direction == 'right') then
+                    bullet.x = bullet.x + bullet.speed * dt
+                end
 
-            if (bullet.direction == 'upleft') then
-                bullet.x = bullet.x - bullet.speed * dt
-                bullet.y = bullet.y - bullet.speed * dt
-            end
-            if (bullet.direction == 'upright') then
-                bullet.y = bullet.y - bullet.speed * dt
-                bullet.x = bullet.x + bullet.speed * dt
-            end
-            if (bullet.direction == 'downleft') then
-                bullet.x = bullet.x - bullet.speed * dt
-                bullet.y = bullet.y + bullet.speed * dt
-            end
-            if (bullet.direction == 'downright') then
-                bullet.y = bullet.y + bullet.speed * dt
-                bullet.x = bullet.x + bullet.speed * dt
-            end
+                if (bullet.direction == 'upleft') then
+                    bullet.x = bullet.x - bullet.speed * dt
+                    bullet.y = bullet.y - bullet.speed * dt
+                end
+                if (bullet.direction == 'upright') then
+                    bullet.y = bullet.y - bullet.speed * dt
+                    bullet.x = bullet.x + bullet.speed * dt
+                end
+                if (bullet.direction == 'downleft') then
+                    bullet.x = bullet.x - bullet.speed * dt
+                    bullet.y = bullet.y + bullet.speed * dt
+                end
+                if (bullet.direction == 'downright') then
+                    bullet.y = bullet.y + bullet.speed * dt
+                    bullet.x = bullet.x + bullet.speed * dt
+                end
 
+            end
         end
     end
 end

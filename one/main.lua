@@ -1,6 +1,9 @@
 -- Player
 local player = {x = 100, y = 100, speed = 200, size = 50, dash=100}
 
+-- playing
+local playing = true
+
 -- Bullet
 local bullets = {}
 
@@ -11,6 +14,10 @@ function love.keypressed(key)
 
     if (key == 'lshift') then
         doDash()
+    end
+
+    if (key == 'p') then
+        playing = not playing
     end
         
 end
@@ -47,25 +54,27 @@ function love.mousepressed(x, y, button)
 end
 
 function love.update(dt)
-    if key_maps['w'] then
-        player.y = player.y - player.speed * dt
-    end
-    if key_maps['s'] then
-        player.y = player.y + player.speed * dt
-    end
-    if key_maps['a'] then
-        player.x = player.x - player.speed * dt
-    end
-    if key_maps['d'] then
-        player.x = player.x + player.speed * dt
-    end
+    if playing then
+        if key_maps['w'] then
+            player.y = player.y - player.speed * dt
+        end
+        if key_maps['s'] then
+            player.y = player.y + player.speed * dt
+        end
+        if key_maps['a'] then
+            player.x = player.x - player.speed * dt
+        end
+        if key_maps['d'] then
+            player.x = player.x + player.speed * dt
+        end
 
 
-    -- move all existing bullets
-    for index, bullet in ipairs(bullets) do
-        if (bullet) then
-            bullet.x = bullet.x - math.cos(bullet.angle)*bullet.speed*dt
-            bullet.y = bullet.y - math.sin(bullet.angle)*bullet.speed*dt
+        -- move all existing bullets
+        for index, bullet in ipairs(bullets) do
+            if (bullet) then
+                bullet.x = bullet.x - math.cos(bullet.angle)*bullet.speed*dt
+                bullet.y = bullet.y - math.sin(bullet.angle)*bullet.speed*dt
+            end
         end
     end
 end
